@@ -16,7 +16,7 @@ typedef enum
 	MOTOR_STATE_IDLE = 0u,
 	MOTOR_STATE_RUNNING,
 	MOTOR_STATE_FAULT
-}Motor_State_t;
+}motor_state_t;
 
 typedef struct
 {
@@ -31,14 +31,19 @@ typedef struct
 	// states
 	uint16_t			speed;
 	uint8_t				direction;
-	Motor_State_t		state;
-}Motor_t;
+	motor_state_t		state;
+}motor_t;
 
 
 //------------ API ------------
 
-void motor_init(Motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port, uint16_t dir_pin);
-void motor_forward(Motor_t* self, uint16_t speed);
+void motor_init(motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port, uint16_t dir_pin);
+void motor_set_speed(motor_t* self, uint16_t speed);
+void motor_forward(motor_t* self);
+void motor_backward(motor_t* self);
+void motor_stop(motor_t* self);
+uint16_t motor_get_speed(motor_t* self);
+motor_state_t motor_get_state(motor_t* self);
 
 
 
