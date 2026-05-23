@@ -1,7 +1,7 @@
 #ifndef DC_MOTOR_DRIVER_H
 #define DC_MOTOR_DRIVER_H
 
-#include "stm32f407xx.h"
+#include "stm32f4xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -25,7 +25,7 @@ typedef struct
 	uint32_t			tim_channel;
 
 	// direction gpio
-	GPIO_TypeDef		dir_port;
+	GPIO_TypeDef*		dir_port;
 	uint16_t			dir_pin;
 
 	// states
