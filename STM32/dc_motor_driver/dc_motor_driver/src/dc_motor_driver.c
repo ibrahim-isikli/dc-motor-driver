@@ -8,20 +8,23 @@ static void _motor_apply_pwm(motor_t* self)
 
 // Public API
 
-void motor_init(motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port, uint16_t dir_pin)
+void motor_init(motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port1, uint16_t dir_pin1,GPIO_TypeDef* dir_port2, uint16_t dir_pin2)
 {
 	self->htim 			= htim;
 	self->tim_channel 	= channel;
-	self->dir_port 		= dir_port;
-	self->dir_pin 		= dir_pin;
+	self->dir_port1 	= dir_port1;
+	self->dir_pin1 		= dir_pin1;
+	self->dir_port2 	= dir_port2;
+	self->dir_pin2 		= dir_pin2;
 	self->speed			= 0;
 	self->direction 	= MOTOR_FORWARD;
 	self->state 		= MOTOR_STATE_IDLE;
+	HAL_GPIO_WritePin(self->dir_port1, self->dir_pin1, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(self->dir_port2, self->dir_pin2, GPIO_PIN_RESET);
 	// start pwm
 	HAL_TIM_PWM_Start(self->htim, self->tim_channel);
 	// start motor
 	_motor_apply_pwm(self);
-	HAL_GPIO_WritePin(self->dir_port, self->dir_pin, GPIO_PIN_RESET);
 }
 
 
@@ -38,7 +41,8 @@ void motor_forward(motor_t* self)
 {
 	self->direction = MOTOR_FORWARD;
 	self->state		= MOTOR_STATE_RUNNING;
-	HAL_GPIO_WritePin(self->dir_port, self->dir_pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(self->dir_port1, self->dir_pin1, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(self->dir_port2, self->dir_pin2, GPIO_PIN_RESET);
 	_motor_apply_pwm(self);
 }
 
@@ -47,7 +51,8 @@ void motor_backward(motor_t* self)
 {
 	self->direction = MOTOR_BACKWARD;
 	self->state		= MOTOR_STATE_RUNNING;
-	HAL_GPIO_WritePin(self->dir_port, self->dir_pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(self->dir_port1, self->dir_pin1, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(self->dir_port2, self->dir_pin2, GPIO_PIN_SET);
 	_motor_apply_pwm(self);
 }
 
@@ -55,7 +60,9 @@ void motor_backward(motor_t* self)
 void motor_stop(motor_t* self)
 {
 	self->state = MOTOR_STATE_IDLE;
-	self->speed = 0u;
+	__HAL_TIM_SET_COMPARE(self->htim, self->tim_channel, 0);
+	HAL_GPIO_WritePin(self->dir_port1, self->dir_pin1, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(self->dir_port2, self->dir_pin2, GPIO_PIN_RESET);
 	_motor_apply_pwm(self);
 }
 

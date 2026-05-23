@@ -59,10 +59,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define DIRECTION_PIN_1_Pin GPIO_PIN_4
-#define DIRECTION_PIN_1_GPIO_Port GPIOC
-#define DIRECTION_PIN___Pin GPIO_PIN_5
-#define DIRECTION_PIN___GPIO_Port GPIOC
+#define RIGHT_MOTOR_DIRECTION_Pin GPIO_PIN_4
+#define RIGHT_MOTOR_DIRECTION_GPIO_Port GPIOC
+#define LEFT_MOTOR_DIRECTION_Pin GPIO_PIN_5
+#define LEFT_MOTOR_DIRECTION_GPIO_Port GPIOC
+#define RIGHT_MOTOR_DIRECTION2_Pin GPIO_PIN_0
+#define RIGHT_MOTOR_DIRECTION2_GPIO_Port GPIOB
+#define LEFT_MOTOR_DIRECTION2_Pin GPIO_PIN_1
+#define LEFT_MOTOR_DIRECTION2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

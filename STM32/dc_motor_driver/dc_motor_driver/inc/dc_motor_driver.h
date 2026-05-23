@@ -25,8 +25,10 @@ typedef struct
 	uint32_t			tim_channel;
 
 	// direction gpio
-	GPIO_TypeDef*		dir_port;
-	uint16_t			dir_pin;
+	GPIO_TypeDef*		dir_port1;
+	uint16_t			dir_pin1;
+	GPIO_TypeDef*		dir_port2;
+	uint16_t			dir_pin2;
 
 	// states
 	uint16_t			speed;
@@ -37,7 +39,7 @@ typedef struct
 
 //------------ API ------------
 
-void motor_init(motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port, uint16_t dir_pin);
+void motor_init(motor_t* self, TIM_HandleTypeDef* htim, uint32_t channel, GPIO_TypeDef* dir_port1, uint16_t dir_pin1,GPIO_TypeDef* dir_port2, uint16_t dir_pin2);
 void motor_set_speed(motor_t* self, uint16_t speed);
 void motor_forward(motor_t* self);
 void motor_backward(motor_t* self);
