@@ -43,7 +43,8 @@
 TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
-
+motor_t right_motor;
+motor_t left_motor;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,7 +91,14 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+  motor_init(&right_motor, &htim3, TIM_CHANNEL_1, RIGHT_MOTOR_DIRECTION_GPIO_Port, RIGHT_MOTOR_DIRECTION_Pin,RIGHT_MOTOR_DIRECTION2_GPIO_Port,RIGHT_MOTOR_DIRECTION2_Pin);
+  motor_init(&left_motor, &htim3, TIM_CHANNEL_2, LEFT_MOTOR_DIRECTION_GPIO_Port, LEFT_MOTOR_DIRECTION_Pin,LEFT_MOTOR_DIRECTION2_GPIO_Port,LEFT_MOTOR_DIRECTION2_Pin);
+  motor_set_speed(&right_motor, 900);
+  motor_set_speed(&left_motor, 900);
+  uint32_t last_tick = HAL_GetTick();
+  uint8_t  going_forward = 1;
+  motor_forward(&right_motor);
+  motor_forward(&left_motor);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,6 +108,24 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if (HAL_GetTick() - last_tick >= 3000)
+	      {
+	          last_tick = HAL_GetTick();
+
+	          if (going_forward)
+	          {
+	              motor_backward(&right_motor);
+	              motor_backward(&left_motor);
+	              going_forward = 0;
+	          }
+	          else
+	          {
+	              motor_forward(&right_motor);
+	              motor_forward(&left_motor);
+	              going_forward = 1;
+	          }
+	      }
+
   }
   /* USER CODE END 3 */
 }
@@ -227,16 +253,27 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, DIRECTION_PIN_1_Pin|DIRECTION_PIN___Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RIGHT_MOTOR_DIRECTION_Pin|LEFT_MOTOR_DIRECTION_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : DIRECTION_PIN_1_Pin DIRECTION_PIN___Pin */
-  GPIO_InitStruct.Pin = DIRECTION_PIN_1_Pin|DIRECTION_PIN___Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, RIGHT_MOTOR_DIRECTION2_Pin|LEFT_MOTOR_DIRECTION2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : RIGHT_MOTOR_DIRECTION_Pin LEFT_MOTOR_DIRECTION_Pin */
+  GPIO_InitStruct.Pin = RIGHT_MOTOR_DIRECTION_Pin|LEFT_MOTOR_DIRECTION_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RIGHT_MOTOR_DIRECTION2_Pin LEFT_MOTOR_DIRECTION2_Pin */
+  GPIO_InitStruct.Pin = RIGHT_MOTOR_DIRECTION2_Pin|LEFT_MOTOR_DIRECTION2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
