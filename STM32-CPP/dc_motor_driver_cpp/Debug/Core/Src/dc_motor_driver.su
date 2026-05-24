@@ -1,0 +1,8 @@
+../Core/Src/dc_motor_driver.cpp:3:1:motor::motor(TIM_HandleTypeDef*, uint32_t, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t)	24	static
+../Core/Src/dc_motor_driver.cpp:24:6:void motor::_apply_pwm()	16	static
+../Core/Src/dc_motor_driver.cpp:29:6:void motor::set_speed(uint16_t)	16	static
+../Core/Src/dc_motor_driver.cpp:37:6:void motor::forward()	16	static
+../Core/Src/dc_motor_driver.cpp:46:6:void motor::backward()	16	static
+../Core/Src/dc_motor_driver.cpp:55:6:void motor::stop()	16	static
+../Core/Src/dc_motor_driver.cpp:63:10:uint16_t motor::get_speed()	16	static
+../Core/Src/dc_motor_driver.cpp:68:15:motor_state_t motor::get_state()	16	static
