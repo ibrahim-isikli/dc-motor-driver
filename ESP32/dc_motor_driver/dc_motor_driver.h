@@ -17,7 +17,7 @@ typedef enum
 class motor
 {
   public:
-    motor(uint8_t pwm_pin, uint8_t ledc_ch, uint8_t dir_pin1, uint8_t dir_pin2, uint32_t freq = 1000, uint8_t resolution = 10);
+    motor(uint8_t pwm_pin, uint8_t dir_pin1, uint8_t dir_pin2, uint32_t freq = 1000, uint8_t resolution = 10);
     void set_speed(uint16_t speed);
     void forward();
     void backward();
@@ -27,7 +27,6 @@ class motor
 
   private:
     uint8_t _pwm_pin;
-    uint8_t _ledc_ch;
     uint8_t _dir_pin1;
     uint8_t _dir_pin2;
     uint8_t _resolution;
