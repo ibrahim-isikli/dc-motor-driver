@@ -1,5 +1,3 @@
-#include "esp32-hal-ledc.h"
-#include "driver/ledc.h"
 #include "dc_motor_driver.h"
 
 // constructor
@@ -25,26 +23,45 @@ motor::motor(uint8_t pwm_pin, uint8_t dir_pin1, uint8_t dir_pin2, uint32_t freq,
   ledcWrite(_pwm_pin,0);
 }
 
+void motor::_apply_pwm()
+{
+  ledcWrite(_pwm_pin,_speed);
+}
 
 void motor::set_speed(uint16_t speed)
 {
+  if(speed>_max_duty)
+    speed = _max_duty;
+  _speed = speed;
+  _apply_pwm();
 
 }
 
 void motor::forward()
 {
-  
+  _direction = MOTOR_FORWARD;
+  _state = MOTOR_STATE_RUNNING;
+  digitalWrite(_dir_pin1,HIGH);
+  digitalWrite(_dir_pin2,LOW);
+  _apply_pwm();
 }
 
 
 void motor::backward()
 {
-
+  _direction = MOTOR_BACKWARD;
+  _state = MOTOR_STATE_RUNNING;
+  digitalWrite(_dir_pin1,LOW);
+  digitalWrite(_dir_pin2,HIGH);
+  _apply_pwm();
 }
 
 void motor::stop()
 {
-
+  _state = MOTOR_STATE_IDLE;
+  digitalWrite(_dir_pin1,LOW);
+  digitalWrite(_dir_pin2,LOW);
+  ledcWrite(_pwm_pin,0);
 }
 
 uint16_t motor::get_speed()
