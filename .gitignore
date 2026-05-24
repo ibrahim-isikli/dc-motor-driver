@@ -64,3 +64,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 STM32/dc_motor_driver/Debug
+STM32-CPP/dc_motor_driver_cpp/Debug
